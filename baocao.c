@@ -313,6 +313,158 @@ void PP_lap() {
     }
 }
 
+double f1(double x){ return exp(x) - 10 * x + 7; }
+double df1(double x){ return exp(x) - 10; }
+double ddf1(double x){ return exp(x); }
+
+double f2(double x){ return pow(x, 3) + x - 5; }
+double df2(double x){ return 3 * x * x + 1; }
+double ddf2(double x){ return 6 * x; }
+
+double f3(double x){ return sin(x) - x + 0.25; }
+double df3(double x){ return  cos(x) - 1; }
+double ddf3(double x){ return -sin(x); }
+
+void PP_tiep_tuyen() {
+	while(1){
+		printf("--------------------------------\n");
+		printf("1. e^x - 10x + 7 = 0\n");
+		printf("2. x^3 + x - 5 = 0\n");
+		printf("3. sin(x) - x + 1/4 = 0\n");
+		printf("4. Thoat\n");
+		printf("--------------------------------\n");
+
+		int lc;
+		printf("Lua chon phuong trinh: ");
+		scanf("%d", &lc);
+
+		if(lc == 4){
+			break;
+		}
+
+		double (*f)(double);
+		double (*df)(double);
+		double (*ddf)(double);
+
+		if(lc == 1){
+			f = f1;
+			df = df1;
+			ddf = ddf1;
+		}
+		else if(lc == 2){
+			f = f2;
+			df = df2;
+			ddf = ddf2;
+		}
+		else if(lc == 3){
+			f = f3;
+			df = df3;
+			ddf = ddf3;
+		}
+		else{
+			printf("Lua chon khong hop le!\n");
+			continue;
+		}
+
+		double x, y;
+		double EPS = 1e-3;
+
+		printf("Nhap gia tri x ban dau: ");
+		scanf("%lf", &x);
+
+        if(f(x) * ddf(x) <= 0){
+        	printf("Khong du dieu kien hoi tu Furie\n");
+        	continue;
+		}
+        
+		do{
+			y = x;
+
+			if(df(y) == 0){
+				printf("Dao ham bang 0\n");
+				break;
+			}
+
+			x = y - f(y) / df(y);
+
+		} while(fabs(x - y) > eps);
+
+		printf("Nghiem x = %.3lf\n", x);
+	}
+
+}
+
+double f1a(double x){ return pow(2, x) + x - 4; }
+
+double f2a(double x){ return pow(x, 3) + x - 5; }
+
+double f3a(double x){ return exp(x) - 10 * x + 7; }
+
+
+void PP_day_cung(){
+	while(1){
+		printf("--------------------------------\n");
+		printf("1. 2^x + x - 4 = 0\n");
+		printf("2. x^3 + x - 5 = 0\n");
+		printf("3. e^x - 10x + 7 = 0\n");
+		printf("4. Thoat\n");
+		printf("--------------------------------\n");
+
+		int lc;
+		printf("Lua chon phuong trinh: ");
+		scanf("%d", &lc);
+
+		if(lc == 4){
+			break;
+		}
+
+		double (*f)(double);
+
+		if(lc == 1){
+			f = f1a;
+		}
+		else if(lc == 2){
+			f = f2a;
+		}
+		else if(lc == 3){
+			f = f3a;
+		}
+		else{
+			printf("Lua chon khong hop le!\n");
+			continue;
+		}
+
+	double x, a, b;
+	double EPS = 1e-3;
+	
+	printf("Nhap khoang nghiem a = "); scanf("%lf", &a);
+	printf("Nhap khoang nghiem b = "); scanf("%lf", &b);
+	
+	if(a >= b){
+		printf("Khoang nghiem khong hop le\n");
+		continue;
+	}
+	
+	if(f(a) * f(b) > 0){
+	    printf("Khong ton tai nghiem trong khoang nay\n");
+	    continue;
+    }
+	
+	do{
+		if(f(b) - f(a) < 1e-12){
+			printf("Mau so bang 0\n");
+			break;
+		}
+		x = a - (b - a) * f(a) / (f(b) - f(a));
+		if(f(a) * f(x) < 0) b = x;
+		else a = x; 
+	} while(fabs(f(x)) > eps);
+	
+	printf("Nghiem x = %.3lf\n", x);
+	}
+	
+}
+
 int main() {
     int choice;
 

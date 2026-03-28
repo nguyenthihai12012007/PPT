@@ -127,10 +127,10 @@ void xulyMenuTimNghiem() {
             PP_lap();
             break;
         case 3:
-            //tieptuyen;
+            PP_tiep_tuyen();
             break;
         case 4:
-            //daycung;
+            PP_day_cung();
             break;
         case 0:
             printf("Quay lai menu chinh.\n");
