@@ -108,7 +108,17 @@ void emux() {
     printf("\n");
 }
 
-void dinhly3(int n, int a[]) {
+void dinhly3() {
+    int n;
+    printf("Nhap vao bac cua phuong trinh: ");
+    scanf("%d",&n);
+
+    int a[n+1];
+    printf("Nhap vao cac he so: ");
+    for(int i=0;i<=n;i++) {
+        scanf("%d",&a[i]);
+    }
+
     double m1 = 0, m2 = 0;
 
     for(int i = 1; i <= n; i++) {
@@ -129,7 +139,17 @@ void dinhly3(int n, int a[]) {
     printf("%.5lf <= |x| <= %.5lf\n", x1, x2);
 }
 
-double dinhly4(int n, int a[]) {
+void dinhly4() {
+    int n;
+    printf("Nhap vao bac cua phuong trinh: ");
+    scanf("%d",&n);
+
+    int a[n+1];
+    printf("Nhap vao cac he so: ");
+    for(int i=0;i<=n;i++) {
+        scanf("%d",&a[i]);
+    }
+
     if (a[0] < 0) {
         for (int i = 0; i <= n; i++) {
             a[i] *= -1;
@@ -152,10 +172,11 @@ double dinhly4(int n, int a[]) {
     }
 
     if (m == -1) {
-        return -1;
+        return ;
     }
 
-    return 1.0 + pow((double)amax / a[0], 1.0 / m);
+    double kq=1.0 + pow((double)amax / a[0], 1.0 / m);
+    printf("%lld",kq);
 }
 
 double f(double x) {
@@ -213,6 +234,85 @@ void chiadoi() {
     printf("\nNghiem gan dung x = %.10lf\n", c);
 }
 
+double g1(double x) {
+    return pow(x, 3) - 1;
+}
+
+double dg1(double x) { 
+    return 3 * pow(x, 2); 
+}
+
+double g2(double x) {
+    return (x + 1) / pow(x, 2);
+}
+
+double dg2(double x) { 
+    return (2 - x) / pow(x, 3); 
+}
+
+double g3(double x) {
+    return cbrt(x + 1);
+}
+
+double dg3(double x) { 
+    return 1 / (3 * pow(x + 1, 2.0/3)); 
+}
+
+double lap(double x, double EPS, double (*g)(double)) {
+    double y;
+    printf("\nBang lap:\n");
+    printf("    x    |   g(x)\n");
+    printf(" -----------------\n");
+    do {
+        y = x;
+        x = g(y);
+        printf("  %.3lf  |  %.3lf\n", y, x);
+    } while (fabs(x-y) > eps);
+    return x;
+}
+
+void PP_lap() {
+    printf("Tim nghiem phuong trinh x^3-x-1 = 0 bang phuong phap lap\n");
+    while(1) {
+        printf("1. Ham g1(x) = x^3-1\n");
+        printf("2. Ham g2(x) = (x+1)/x^2\n");
+        printf("3. Ham g3(x) = pow(x+1, 1.0/3)\n");
+        printf("4. Ket thuc\n");
+        printf("\nThuc hien chuc nang: ");
+        int choose;
+        scanf("%d", &choose);
+        if (choose == 4) {
+            break;
+        }
+        double (*g)(double);
+        double (*dg)(double);
+        if (choose == 1) {
+            g = g1;
+            dg = dg1;
+        } else if (choose == 2) {
+            g = g2;
+            dg = dg2;
+        } else if (choose == 3) {
+            g = g3;
+            dg = dg3;
+        } else {
+            printf("Lua chon khong hop le!\n");
+            continue;
+        }
+        double x0, EPS;
+        printf("\nNhap gia tri ban dau x0 = ");
+        scanf("%lf", &x0);
+        printf("Nhap sai so eps = ");
+        scanf("%lf", &EPS);
+        if (fabs(dg(x0)) >= 1) {
+            printf("\nHam khong hoi tu tai x0 nay!\n\n");
+            continue;
+        }
+        double kq = lap(x0, eps, g);
+        printf("\nNghiem gan dung x = %.3lf\n", kq);
+    }
+}
+
 int main() {
     int choice;
 
@@ -237,7 +337,7 @@ int main() {
                 xulyMenuTachNghiem();
                 break;
             case 4:
-                menu_timnghiem();
+                xulyMenuTimNghiem();
                 printf("\n");
                 break;
             case 0:

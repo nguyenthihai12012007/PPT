@@ -91,7 +91,7 @@ void xulyMenuTachNghiem() {
             dinhly4();
             break;
         case 3:
-            dinhly5();
+            //dinhly5();
             break;
         case 0:
             printf("Quay lai menu chinh.\n");
@@ -110,6 +110,35 @@ void menu_timnghiem() {
     printf("4.Phuong phap day cung\n");
     printf("0. Thoat chuong trinh\n");
     printf("Chon: ");
+}
+
+void xulyMenuTimNghiem() {
+    int subChoice;
+    do {
+        menu_timnghiem();
+        printf("\nNhap lua chon: ");
+        scanf("%d",&subChoice);
+
+        switch (subChoice) {
+        case 1:
+            chiadoi();
+            break;
+        case 2:
+            PP_lap();
+            break;
+        case 3:
+            //tieptuyen;
+            break;
+        case 4:
+            //daycung;
+            break;
+        case 0:
+            printf("Quay lai menu chinh.\n");
+            break;
+        default:
+            printf("Lua chon khong hop le!\n");
+        }
+    } while (subChoice != 0);
 }
 
 void menu() {
