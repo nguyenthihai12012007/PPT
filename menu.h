@@ -2,6 +2,8 @@
 #define MENU_H
 
 void menu(void);
+void clearInputBuffer(void);
+void pauseScreen(void);
 
 void menu_hoocner(void);
 void xuLyMenuHoocner(void);

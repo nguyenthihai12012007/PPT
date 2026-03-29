@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 #include "menu.h"
 
 #define eps 1e-6
@@ -24,6 +25,7 @@ void hoocner1() {
         p=p*c+a[i];
     }
     printf("Ket qua : %d\n",p);
+    pauseScreen();
 }
 
 void hoocnertq() {
@@ -54,12 +56,13 @@ void hoocnertq() {
         printf("%d ",b[i][0]);
     }
     printf("\n");
+    pauseScreen();
 }
 
 void cosx() {
     double x;
     printf("Nhap gia tri x: ");
-    scanf("%lld",&x);
+    scanf("%lf",&x);
     double sum=1;
     double term=1;
     int k=0;
@@ -70,14 +73,15 @@ void cosx() {
         sum+=term;
     }
     
-    printf("%lld",sum);
+    printf("%lf",sum);
     printf("\n");
+    pauseScreen();
 }
 
 void sinx() {
     double x;
     printf("Nhap gia tri x: ");
-    scanf("%lld",&x);
+    scanf("%lf",&x);
     double sum=x;
     double term=x;
     int k=0;
@@ -87,14 +91,15 @@ void sinx() {
         sum+=term;
     }
     
-    printf("%lld",sum);
+    printf("%lf",sum);
     printf("\n");
+    pauseScreen();
 }
 
 void emux() {
     double x;
     printf("Nhap gia tri x: ");
-    scanf("%lld",&x);
+    scanf("%lf",&x);
     double sum=1;
     double term=1;
     int k=0;
@@ -104,8 +109,9 @@ void emux() {
         sum+=term;
     }
     
-    printf("%lld",sum);
+    printf("%lf",sum);
     printf("\n");
+    pauseScreen();
 }
 
 void dinhly3() {
@@ -137,6 +143,7 @@ void dinhly3() {
     double x2 = 1 + m1 / fabs(a[0]);
 
     printf("%.5lf <= |x| <= %.5lf\n", x1, x2);
+    pauseScreen();
 }
 
 void dinhly4() {
@@ -176,7 +183,8 @@ void dinhly4() {
     }
 
     double kq=1.0 + pow((double)amax / a[0], 1.0 / m);
-    printf("%lld",kq);
+    printf("%lf",kq);
+    pauseScreen();
 }
 
 double f(double x) {
@@ -211,6 +219,7 @@ void chiadoi() {
     
     if (fa * fb >= 0) {
         printf("Khoang [a,b] khong hop le!\n");
+        pauseScreen();
         return;
     }
     
@@ -229,9 +238,10 @@ void chiadoi() {
             a = c;
             fa=fc;
         }
-    } while ((fabs(a-b) > eps) ); 
+    } while (fabs(a - b) > EPS); 
     
     printf("\nNghiem gan dung x = %.10lf\n", c);
+    pauseScreen();
 }
 
 double g1(double x) {
@@ -267,7 +277,7 @@ double lap(double x, double EPS, double (*g)(double)) {
         y = x;
         x = g(y);
         printf("  %.3lf  |  %.3lf\n", y, x);
-    } while (fabs(x-y) > eps);
+    } while (fabs(x - y) > EPS);
     return x;
 }
 
@@ -308,8 +318,9 @@ void PP_lap() {
             printf("\nHam khong hoi tu tai x0 nay!\n\n");
             continue;
         }
-        double kq = lap(x0, eps, g);
+        double kq = lap(x0, EPS, g);
         printf("\nNghiem gan dung x = %.3lf\n", kq);
+        pauseScreen();
     }
 }
 
@@ -373,9 +384,10 @@ void PP_tiep_tuyen() {
 		scanf("%lf", &x);
 
         if(f(x) * ddf(x) <= 0){
-        	printf("Khong du dieu kien hoi tu Furie\n");
-        	continue;
-		}
+            printf("Khong du dieu kien hoi tu Furie\n");
+            pauseScreen();
+            continue;
+        }
         
 		do{
 			y = x;
@@ -390,6 +402,7 @@ void PP_tiep_tuyen() {
 		} while(fabs(x - y) > eps);
 
 		printf("Nghiem x = %.3lf\n", x);
+        pauseScreen();
 	}
 
 }
@@ -461,6 +474,7 @@ void PP_day_cung(){
 	} while(fabs(f(x)) > eps);
 	
 	printf("Nghiem x = %.3lf\n", x);
+    pauseScreen();
 	}
 	
 }
@@ -474,7 +488,7 @@ int main() {
 
         if (scanf("%d", &choice) != 1) {   
             printf("Loi: Vui long chi nhap chu so!\n");
-            getchar();
+            clearInputBuffer();
             continue;
         }
 

@@ -6,7 +6,20 @@ void menu_hoocner() {
     printf("1.Gia tri\n");
     printf("2.Tong quat\n");
     printf("0. Thoat chuong trinh\n");
-    printf("Chon: ");
+}
+
+void clearInputBuffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
+    }
+}
+
+void pauseScreen(void) {
+    clearInputBuffer();
+    printf("\nNhan Enter de tiep tuc...");
+    fflush(stdout);
+    getchar();
+    printf("\n");
 }
 
 void xuLyMenuHoocner() {
@@ -14,7 +27,11 @@ void xuLyMenuHoocner() {
     do {
         menu_hoocner();
         printf("\nNhap lua chon: ");
-        scanf("%d", &subChoice);
+        if (scanf("%d", &subChoice) != 1) {
+            printf("Lua chon khong hop le!\n");
+            clearInputBuffer();
+            continue;
+        }
 
         switch (subChoice) {
             case 1:
@@ -37,7 +54,11 @@ void xulyMenuMaclaurin() {
     do {
         menu_maclaurin();
         printf("\nNhap lua chon: ");
-        scanf("%d",&subChoice);
+        if (scanf("%d", &subChoice) != 1) {
+            printf("Lua chon khong hop le!\n");
+            clearInputBuffer();
+            continue;
+        }
 
         switch (subChoice) {
         case 1:
@@ -81,7 +102,11 @@ void xulyMenuTachNghiem() {
     do {
         menu_tachnghiem();
         printf("\nNhap lua chon: ");
-        scanf("%d",&subChoice);
+        if (scanf("%d", &subChoice) != 1) {
+            printf("Lua chon khong hop le!\n");
+            clearInputBuffer();
+            continue;
+        }
 
         switch (subChoice) {
         case 1:
@@ -117,7 +142,11 @@ void xulyMenuTimNghiem() {
     do {
         menu_timnghiem();
         printf("\nNhap lua chon: ");
-        scanf("%d",&subChoice);
+        if (scanf("%d", &subChoice) != 1) {
+            printf("Lua chon khong hop le!\n");
+            clearInputBuffer();
+            continue;
+        }
 
         switch (subChoice) {
         case 1:
