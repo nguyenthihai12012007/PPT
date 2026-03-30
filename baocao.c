@@ -10,8 +10,8 @@ int n;
 double A[MAX];
 
 void hoocner1() {
-    int n,c;
-    printf("Nhap gia tri bac va c: ");
+    int c;
+    printf("\nNhap gia tri bac va c: ");
     scanf("%d%d",&n,&c);
 
     int a[n+1];
@@ -29,8 +29,8 @@ void hoocner1() {
 }
 
 void hoocnertq() {
-    int n,c;
-    printf("Nhap gia tri bac va c: ");
+    int c;
+    printf("\nNhap gia tri bac va c: ");
     scanf("%d%d",&n,&c);
     
     int a[n+1];
@@ -46,7 +46,7 @@ void hoocnertq() {
     }
     
     for(int i=1;i<=n;i++) {
-        for(int j=0;j<n;j++) {
+        for(int j=0;j<n-i;j++) {
             b[i][j]=b[i-1][j]*c+b[i-1][j+1];
         }
     }
@@ -61,8 +61,9 @@ void hoocnertq() {
 
 void cosx() {
     double x;
-    printf("Nhap gia tri x: ");
+    printf("\nNhap gia tri x: ");
     scanf("%lf",&x);
+    x = x * M_PI /180.0;
     double sum=1;
     double term=1;
     int k=0;
@@ -73,15 +74,16 @@ void cosx() {
         sum+=term;
     }
     
-    printf("%lf",sum);
+    printf("Ket qua: %lf",sum);
     printf("\n");
     pauseScreen();
 }
 
 void sinx() {
     double x;
-    printf("Nhap gia tri x: ");
+    printf("\nNhap gia tri x: ");
     scanf("%lf",&x);
+    x = x * M_PI / 180.0;
     double sum=x;
     double term=x;
     int k=0;
@@ -91,14 +93,14 @@ void sinx() {
         sum+=term;
     }
     
-    printf("%lf",sum);
+    printf("Ket qua: %lf",sum);
     printf("\n");
     pauseScreen();
 }
 
 void emux() {
     double x;
-    printf("Nhap gia tri x: ");
+    printf("\nNhap gia tri x: ");
     scanf("%lf",&x);
     double sum=1;
     double term=1;
@@ -109,14 +111,14 @@ void emux() {
         sum+=term;
     }
     
-    printf("%lf",sum);
+    printf("Ket qua: %lf",sum);
     printf("\n");
     pauseScreen();
 }
 
 void dinhly3() {
     int n;
-    printf("Nhap vao bac cua phuong trinh: ");
+    printf("\nNhap vao bac cua phuong trinh: ");
     scanf("%d",&n);
 
     int a[n+1];
@@ -128,27 +130,27 @@ void dinhly3() {
     double m1 = 0, m2 = 0;
 
     for(int i = 1; i <= n; i++) {
-        if (fabs(a[i]) > m1) {
-            m1 = fabs(a[i]);
+        if (abs(a[i]) > m1) {
+            m1 = abs(a[i]);
         }
     }
 
     for(int i = 0; i < n; i++) {
-        if (fabs(a[i]) > m2) {
-            m2 = fabs(a[i]);
+        if (abs(a[i]) > m2) {
+            m2 = abs(a[i]);
         }
     }
 
-    double x1 = fabs(a[n]) / (m2 + fabs(a[n]));
-    double x2 = 1 + m1 / fabs(a[0]);
+    double x1 = abs(a[n]) / (m2 + abs(a[n]));
+    double x2 = 1 + m1 / abs(a[0]);
 
-    printf("%.5lf <= |x| <= %.5lf\n", x1, x2);
+    printf("Moi nghiem x cua phuong trinh deu thoa: %.5lf <= |x| <= %.5lf\n", x1, x2);
     pauseScreen();
 }
 
 void dinhly4() {
     int n;
-    printf("Nhap vao bac cua phuong trinh: ");
+    printf("\nNhap vao bac cua phuong trinh: ");
     scanf("%d",&n);
 
     int a[n+1];
@@ -165,7 +167,7 @@ void dinhly4() {
 
     int amax = 0;
     for (int i = 1; i <= n; i++) {
-        if (abs(a[i]) > amax) {
+        if (a[i] < 0 && abs(a[i]) > amax) {
             amax = abs(a[i]);
         }
     }
@@ -173,7 +175,7 @@ void dinhly4() {
     int m = -1;
     for (int i = 1; i <= n; i++) {
         if (a[i] < 0) {
-            m = n - i;
+            m = i;
             break;
         }
     }
@@ -183,7 +185,7 @@ void dinhly4() {
     }
 
     double kq=1.0 + pow((double)amax / a[0], 1.0 / m);
-    printf("%lf",kq);
+    printf("Can tren cua nghiem duong: %lf\n",kq);
     pauseScreen();
 }
 
@@ -199,7 +201,7 @@ void chiadoi() {
     double c, a, b, EPS;
     double fa,fb,fc;
     
-    printf("Nhap bac da thuc n = ");
+    printf("\nNhap bac da thuc n = ");
     scanf("%d", &n);
     
     printf("Nhap cac he so cua da thuc: ");
@@ -213,7 +215,7 @@ void chiadoi() {
     scanf("%lf", &b);
     printf("Nhap sai so eps = ");
     scanf("%lf", &EPS);
-    
+
     fa=f(a);
     fb=f(b);
     
@@ -282,7 +284,7 @@ double lap(double x, double EPS, double (*g)(double)) {
 }
 
 void PP_lap() {
-    printf("Tim nghiem phuong trinh x^3-x-1 = 0 bang phuong phap lap\n");
+    printf("\nTim nghiem phuong trinh x^3-x-1 = 0 bang phuong phap lap\n");
     while(1) {
         printf("1. Ham g1(x) = x^3-1\n");
         printf("2. Ham g2(x) = (x+1)/x^2\n");
@@ -380,11 +382,11 @@ void PP_tiep_tuyen() {
 		double x, y;
 		double EPS = 1e-3;
 
-		printf("Nhap gia tri x ban dau: ");
+		printf("\nNhap gia tri x ban dau: ");
 		scanf("%lf", &x);
 
         if(f(x) * ddf(x) <= 0){
-            printf("Khong du dieu kien hoi tu Furie\n");
+            printf("Khong du dieu kien hoi tu Furie!\n");
             pauseScreen();
             continue;
         }
@@ -399,7 +401,7 @@ void PP_tiep_tuyen() {
 
 			x = y - f(y) / df(y);
 
-		} while(fabs(x - y) > eps);
+		} while(fabs(x - y) > EPS);
 
 		printf("Nghiem x = %.3lf\n", x);
         pauseScreen();
@@ -450,28 +452,28 @@ void PP_day_cung(){
 	double x, a, b;
 	double EPS = 1e-3;
 	
-	printf("Nhap khoang nghiem a = "); scanf("%lf", &a);
+	printf("\nNhap khoang nghiem a = "); scanf("%lf", &a);
 	printf("Nhap khoang nghiem b = "); scanf("%lf", &b);
 	
 	if(a >= b){
-		printf("Khoang nghiem khong hop le\n");
+		printf("Khoang nghiem khong hop le!\n");
 		continue;
 	}
 	
 	if(f(a) * f(b) > 0){
-	    printf("Khong ton tai nghiem trong khoang nay\n");
+	    printf("Khong ton tai nghiem trong khoang nay!\n");
 	    continue;
     }
 	
 	do{
-		if(f(b) - f(a) < 1e-12){
-			printf("Mau so bang 0\n");
+		if(fabs(f(b) - f(a)) < 1e-12){
+			printf("Mau so bang 0!\n");
 			break;
 		}
 		x = a - (b - a) * f(a) / (f(b) - f(a));
 		if(f(a) * f(x) < 0) b = x;
 		else a = x; 
-	} while(fabs(f(x)) > eps);
+	} while(fabs(f(x)) > EPS);
 	
 	printf("Nghiem x = %.3lf\n", x);
     pauseScreen();
@@ -484,7 +486,6 @@ int main() {
 
     do {
         menu();
-        printf("\n");
 
         if (scanf("%d", &choice) != 1) {   
             printf("Loi: Vui long chi nhap chu so!\n");
@@ -507,7 +508,7 @@ int main() {
                 printf("\n");
                 break;
             case 0:
-                printf("Da thoat chuong trinh.\n");
+                printf("Da thoat chuong trinh!\n");
                 break;
             default:
                 printf("Lua chon khong hop le!\n");
@@ -515,5 +516,5 @@ int main() {
     } while(choice != 0);
 
     return 0;
-}
+} 
 
