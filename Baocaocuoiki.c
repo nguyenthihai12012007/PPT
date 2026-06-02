@@ -2,23 +2,54 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define MAX 10
-#define MAX1 100
+#define MAX 20
 #define EPS 1e-3
 #define MAX_LOOP 1000
 
-void nhapMaTranGauss(float a[MAX1][MAX1], int n) {
-    printf("Nhap ma tran mo rong gom %d dong va %d cot:\n", n, n + 1);
-
-    for (int i = 0; i < n; i++) {
-        printf("Nhap dong %d:\n", i + 1);
-        for (int j = 0; j <= n; j++) {
-            scanf("%f", &a[i][j]);
-        }
-    }
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
 
-void xuatMaTranGauss(float a[MAX1][MAX1], int n) {
+void pauseScreen() {
+    printf("\n");
+    printf("Nhan Enter de tiep tuc...");
+    clearInputBuffer();
+    getchar(); 
+}
+
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+void endScreen() {
+    pauseScreen();
+    clearScreen();
+}
+
+void nhapMaTranBangFile(double A[MAX][MAX], int *n) {
+    char tenFile[100];
+    printf("Nhap ten file: ");
+    scanf("%s", tenFile);
+    FILE *f = fopen(tenFile, "r");
+    if (f == NULL) {
+        printf("Khong mo duoc file!\n");
+        return;
+    }
+    fscanf(f, "%d", n);
+    for (int i = 0; i < *n; i++) {
+        for (int j = 0; j <= *n; j++) {
+            fscanf(f, "%lf", &A[i][j]);
+        }
+    }
+    fclose(f);
+}
+
+void xuatMaTranGauss(double a[MAX][MAX], int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j <= n; j++) {
             printf("%10.3f ", a[i][j]);
@@ -27,15 +58,15 @@ void xuatMaTranGauss(float a[MAX1][MAX1], int n) {
     }
 }
 
-void doiDong(float a[MAX1][MAX1], int n, int dong1, int dong2) {
+void doiDong(double a[MAX][MAX], int n, int dong1, int dong2) {
     for (int j = 0; j <= n; j++) {
-        float temp = a[dong1][j];
+        double temp = a[dong1][j];
         a[dong1][j] = a[dong2][j];
         a[dong2][j] = temp;
     }
 }
 
-int gauss(float a[MAX1][MAX1], float x[MAX1], int n) {
+int gauss(double a[MAX][MAX], double x[MAX], int n) {
     for (int i = 0; i < n - 1; i++) {
 
         if (fabs(a[i][i]) < EPS) {
@@ -49,7 +80,7 @@ int gauss(float a[MAX1][MAX1], float x[MAX1], int n) {
             }
 
             if (dongCanDoi == -1) {
-                printf("He khong co nghiem duy nhat hoac khong xu ly duoc.\n");
+                printf("\nHe khong co nghiem duy nhat hoac khong xu ly duoc.\n");
                 return 0;
             }
 
@@ -57,7 +88,7 @@ int gauss(float a[MAX1][MAX1], float x[MAX1], int n) {
         }
 
         for (int j = i + 1; j < n; j++) {
-            float m = -a[j][i] / a[i][i];
+            double m = -a[j][i] / a[i][i];
 
             for (int k = i; k <= n; k++) {
                 a[j][k] = a[j][k] + m * a[i][k];
@@ -71,7 +102,7 @@ int gauss(float a[MAX1][MAX1], float x[MAX1], int n) {
     }
 
     for (int i = n - 1; i >= 0; i--) {
-        float s = 0;
+        double s = 0;
 
         for (int j = i + 1; j < n; j++) {
             s += a[i][j] * x[j];
@@ -83,16 +114,16 @@ int gauss(float a[MAX1][MAX1], float x[MAX1], int n) {
     return 1;
 }
 
-void nhapNghiemBanDau(float x[MAX], int n) {
+void nhapNghiemBanDau(double x[MAX], int n) {
     printf("Nhap xap xi nghiem ban dau:\n");
 
     for (int i = 0; i < n; i++) {
         printf("x%d = ", i + 1);
-        scanf("%f", &x[i]);
+        scanf("%lf", &x[i]);
     }
 }
 
-int kiemTraCheoKhac0(float a[MAX][MAX], int n) {
+int kiemTraCheoKhac0(double a[MAX][MAX], int n) {
     for (int i = 0; i < n; i++) {
         if (fabs(a[i][i]) < 1e-9) {
             return 0;
@@ -101,7 +132,7 @@ int kiemTraCheoKhac0(float a[MAX][MAX], int n) {
     return 1;
 }
 
-int gaussSiedel(float a[MAX][MAX], float x[MAX], int n) {
+int gaussSiedel(double a[MAX][MAX], double x[MAX], int n) {
     int lap;
     int dem = 0;
 
@@ -118,8 +149,8 @@ int gaussSiedel(float a[MAX][MAX], float x[MAX], int n) {
         printf("\nLan lap %d:\n", dem);
 
         for (int i = 0; i < n; i++) {
-            float old = x[i];
-            float s = 0;
+            double old = x[i];
+            double s = 0;
 
             for (int j = 0; j < n; j++) {
                 if (j != i) {
@@ -153,25 +184,7 @@ int gaussSiedel(float a[MAX][MAX], float x[MAX], int n) {
     return 1;
 }
 
-void nhapMaTranBangFile(double A[][MAX + 1], int *n) {
-    char tenFile[100];
-    printf("Nhap ten file: ");
-    scanf("%s", tenFile);
-    FILE *f = fopen(tenFile, "r");
-    if (f == NULL) {
-        printf("Khong mo duoc file!\n");
-        return;
-    }
-    fscanf(f, "%d", n);
-    for (int i = 0; i < *n; i++) {
-        for (int j = 0; j <= *n; j++) {
-            fscanf(f, "%lf", &A[i][j]);
-        }
-    }
-    fclose(f);
-}
-
-void giamDu(double A[][MAX + 1], int n) {
+void giamDu(double A[][MAX], int n) {
     double x[MAX] = {0};
     double r[MAX];
     int k;
@@ -179,7 +192,7 @@ void giamDu(double A[][MAX + 1], int n) {
 
     for (int i = 0; i < n; i++) {
         double pivot = A[i][i];
-        if (pivot == 0) {
+        if (fabs(pivot) < 1e-9) {
             printf("Duong cheo bang 0!\n");
             return;
         }
@@ -243,165 +256,6 @@ void giamDu(double A[][MAX + 1], int n) {
     }
 }
 
-void run1() {
-    double A[MAX][MAX + 1];
-    int n;
-
-    nhapMaTranBangFile(A, &n);
-    giamDu(A, n);
-}
-
-void nhapMaTranTriRiengOnly(double A[][MAX], int *n) {
-    char tenFile[100];
-    printf("Nhap ten file: ");
-    scanf("%s", tenFile);
-    FILE *f = fopen(tenFile, "r");
-    if (f == NULL) {
-        printf("Khong mo duoc file!\n");
-        return;
-    }
-    fscanf(f, "%d", n);
-    for (int i = 0; i < *n; i++) {
-        for (int j = 0; j < *n; j++) {
-            fscanf(f, "%lf", &A[i][j]);
-        }
-    }
-    fclose(f);
-}
-
-void nhanMaTranTriRiengOnly(double A[][MAX], double B[][MAX], double C[][MAX], int n) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            C[i][j] = 0;
-            for (int k = 0; k < n; k++) {
-                C[i][j] += A[i][k] * B[k][j];
-            }
-        }
-    }
-}
-
-void xuatMaTranTriRiengOnly(double A[][MAX], int n) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            printf("%10.3lf ", A[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void giaiBac2TriRiengOnly(double a, double b, double c, double r[]) {
-    double delta = b*b - 4*a*c;
-    if(delta > 0) {
-        r[0] = (-b + sqrt(delta)) / (2*a);
-        r[1] = (-b - sqrt(delta)) / (2*a);
-    }
-    else if(delta == 0) {
-        r[0] = -b / (2*a);
-        r[1] = r[0];
-    }
-    else {
-        printf("Phuong trinh vo nghiem!\n");
-    }
-}
-
-void giaiBac3TriRiengOnly(double a, double b, double c, double d, double r[]) {
-    int dem = 0;
-    for(int i = -100; i <= 100; i++) {
-        double fx = a*i*i*i + b*i*i + c*i + d; 
-        if(fabs(fx) < 1e-6) {
-            r[dem++] = i;
-        }
-    }
-    if(dem == 0) {
-        printf("Khong tim duoc nghiem!\n");
-    }
-}
-
-void danhilepskiTriRiengOnly(double A[][MAX], int n) {
-    double M[MAX][MAX];
-    double M1[MAX][MAX];
-    double B[MAX][MAX];
-    for (int k = n - 2; k >= 0; k--) {
-        if (A[k + 1][k] == 0) {
-            printf("Pivot = 0, khong the tiep tuc!\n");
-            return;
-        }
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i != k) {
-                    if (i == j) { 
-                        M[i][j] = 1;
-                        M1[i][j] = 1;
-                    } else {
-                        M[i][j] = 0;
-                        M1[i][j] = 0;
-                    }
-                } else {
-                    M1[i][j] = A[k + 1][j];
-                    if (j == k) {
-                        M[i][j] = 1.0 / A[k + 1][k];
-                    } else {
-                        M[i][j] = -A[k + 1][j] / A[k + 1][k];
-                    }
-                }
-            }
-        }
-        nhanMaTranTriRiengOnly(A, M, B, n);
-        nhanMaTranTriRiengOnly(M1, B, A, n);
-        printf("\nMa tran sau buoc k = %d:\n", n - k - 1);
-        xuatMaTranTriRiengOnly(A, n);
-    }
-}
-
-void timNghiemTriRiengOnly(double A[][MAX], int n) {
-    double r[10];
-    danhilepskiTriRiengOnly(A, n);
-    printf("\nMa tran Frobenius:\n");
-    xuatMaTranTriRiengOnly(A, n);
-    printf("\nPhuong trinh dac trung:\n");
-    printf("     r^%d", n);
-    for (int j = 0; j < n; j++) {
-        if (A[0][j] >= 0) 
-            printf(" - %.3lf", A[0][j]);
-        else 
-            printf(" + %.3lf", -A[0][j]);
-        if (j != n - 1) {
-            int mu = n - j - 1;
-            if (mu == 1)
-                printf("r");
-            else 
-                printf("r^%d", mu);
-        }
-    }
-    printf(" = 0\n");
-    if (n == 2) {
-        double a = 1, b = -A[0][0], c = -A[0][1];
-        giaiBac2TriRiengOnly(a, b, c, r);
-        printf("\nGia tri rieng: ");
-        for(int i = 0; i < 2; i++) {
-            printf("\n     r%d = %.3lf", i + 1, r[i]);
-        } 
-    }
-    if (n == 3){
-        double a = 1, b = -A[0][0], c = -A[0][1], d = -A[0][2];
-        giaiBac3TriRiengOnly(a, b, c, d, r);
-        printf("\nGia tri rieng: ");
-        for(int i = 0; i < 3; i++) {
-            printf("\n     r%d = %.3lf", i + 1, r[i]);
-        }
-    }
-    printf("\n");
-}
-
-void run2() {
-    int n;
-    double A[MAX][MAX];
-    nhapMaTranTriRiengOnly(A, &n);
-    printf("\nMa tran ban dau:\n");
-    xuatMaTranTriRiengOnly(A, n);
-    timNghiemTriRiengOnly(A, n);
-}
-
 void nhapMaTran(double A[][MAX], int *n) {
     char tenFile[100];
     printf("Nhap ten file: ");
@@ -440,16 +294,6 @@ void xuatMaTran(double A[][MAX], int n) {
     }
 }
 
-void taoDonVi(double A[][MAX], int n) {
-    for (int i = 0 ; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (i == j)
-                A[i][j] = 1;
-            else
-                A[i][j] = 0;
-        }
-    }
-}
 
 void giaiBac2(double a, double b, double c, double r[]) {
     double delta = b*b - 4*a*c;
@@ -457,7 +301,7 @@ void giaiBac2(double a, double b, double c, double r[]) {
         r[0] = (-b + sqrt(delta)) / (2*a);
         r[1] = (-b - sqrt(delta)) / (2*a);
     }
-    else if(delta == 0) {
+    else if(fabs(delta) < 1e-9) {
         r[0] = -b / (2*a);
         r[1] = r[0];
     }
@@ -479,13 +323,109 @@ void giaiBac3(double a, double b, double c, double d, double r[]) {
     }
 }
 
+void danhilepskiTriRiengOnly(double A[][MAX], int n) {
+    double M[MAX][MAX];
+    double M1[MAX][MAX];
+    double B[MAX][MAX];
+    for (int k = n - 2; k >= 0; k--) {
+        if (fabs(A[k + 1][k]) < 1e-9) {
+            printf("Pivot = 0, khong the tiep tuc!\n");
+            return;
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != k) {
+                    if (i == j) { 
+                        M[i][j] = 1;
+                        M1[i][j] = 1;
+                    } else {
+                        M[i][j] = 0;
+                        M1[i][j] = 0;
+                    }
+                } else {
+                    M1[i][j] = A[k + 1][j];
+                    if (j == k) {
+                        M[i][j] = 1.0 / A[k + 1][k];
+                    } else {
+                        M[i][j] = -A[k + 1][j] / A[k + 1][k];
+                    }
+                }
+            }
+        }
+        nhanMaTran(A, M, B, n);
+        nhanMaTran(M1, B, A, n);
+        printf("\nMa tran sau buoc k = %d:\n", n - k - 1);
+        xuatMaTran(A, n);
+    }
+}
+
+void timNghiemTriRiengOnly(double A[][MAX], int n) {
+    double r[10];
+    danhilepskiTriRiengOnly(A, n);
+    printf("\nMa tran Frobenius:\n");
+    xuatMaTran(A, n);
+    printf("\nPhuong trinh dac trung:\n");
+    printf("     r^%d", n);
+    for (int j = 0; j < n; j++) {
+        if (A[0][j] >= 0) 
+            printf(" - %.3lf", A[0][j]);
+        else 
+            printf(" + %.3lf", -A[0][j]);
+        if (j != n - 1) {
+            int mu = n - j - 1;
+            if (mu == 1)
+                printf("r");
+            else 
+                printf("r^%d", mu);
+        }
+    }
+    printf(" = 0\n");
+    if (n == 2) {
+        double a = 1, b = -A[0][0], c = -A[0][1];
+        giaiBac2(a, b, c, r);
+        printf("\nGia tri rieng: ");
+        for(int i = 0; i < 2; i++) {
+            printf("\n     r%d = %.3lf", i + 1, r[i]);
+        } 
+    }
+    if (n == 3){
+        double a = 1, b = -A[0][0], c = -A[0][1], d = -A[0][2];
+        giaiBac3(a, b, c, d, r);
+        printf("\nGia tri rieng: ");
+        for(int i = 0; i < 3; i++) {
+            printf("\n     r%d = %.3lf", i + 1, r[i]);
+        }
+    }
+    printf("\n");
+}
+
+void run1() {
+    int n;
+    double A[MAX][MAX];
+    nhapMaTran(A, &n);
+    printf("\nMa tran ban dau:\n");
+    xuatMaTran(A, n);
+    timNghiemTriRiengOnly(A, n);
+}
+
+void taoDonVi(double A[][MAX], int n) {
+    for (int i = 0 ; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i == j)
+                A[i][j] = 1;
+            else
+                A[i][j] = 0;
+        }
+    }
+}
+
 void danhilepski(double A[][MAX], double C[][MAX], int n) {
     double M[MAX][MAX];
     double M1[MAX][MAX];
     double B[MAX][MAX];
     taoDonVi(C, n);
     for (int k = n - 2; k >= 0; k--) {
-        if (A[k + 1][k] == 0) {
+        if (fabs(A[k + 1][k]) < 1e-9) {
             printf("Pivot = 0, khong the tiep tuc!\n");
             return;
         }
@@ -590,7 +530,7 @@ void timNghiem(double A[][MAX], double C[][MAX], int n) {
     }
 }
 
-void run3() {
+void run2() {
     int n;
     double A[MAX][MAX], C[MAX][MAX];
     nhapMaTran(A, &n);
@@ -650,7 +590,7 @@ void bangAyken(double x[], int n, double c){
         printf(" | %10.2lf", d);
         printf("\n");
     }
-    printf("\n\n");
+    printf("\n");
 }
 
 void ayken(double x[], double y[], int n, double c){
@@ -678,13 +618,24 @@ void bangSaiPhan(double a[][100], double x[], double y[], int n){
             a[i][j] = a[i][j - 1] - a[i - 1][j - 1];
         }
     }
-    printf("------------------------------------------------------------\n");
 
-    printf("%-8s%-10s%-10s%-10s%-10s%-10s\n",
-           "xi", "f(xi)", "d1f", "d2f", "d3f", "d4f");
-    printf("------------------------------------------------------------\n");
+    int width = 9 * (n + 1);
+    for(int i = 0; i < width; i++) {
+        printf("-");
+    }
+    printf("\n");
+    
+    printf("%-10s%-10s", "xi", "f(xi)");
+    for(int j = 1; j < n; j++) {
+        printf("d%df       ", j);
+    }
+    printf("\n");
+    for(int i = 0; i < width; i++) {
+        printf("-");
+    }
+    printf("\n");
     for(int i = 0; i < n; i++){
-    	printf("%-8.0lf", x[i]);
+    	printf("%-10.2lf", x[i]);
     	printf("%-10.2lf", a[i][0]);
     	for(int j = 1; j < n; j++){
     		if(i >= j)
@@ -694,7 +645,10 @@ void bangSaiPhan(double a[][100], double x[], double y[], int n){
 		}
 		printf("\n");
 	}
-    printf("------------------------------------------------------------\n");
+    for(int i = 0; i < width; i++) {
+        printf("-");
+    }
+    printf("\n");
 }
 
 double fTichPhan(double x) {
@@ -849,13 +803,11 @@ void menuGiaiHeTuyenTinh() {
 
         switch (chon) {
             case 1: {
-                float a[MAX1][MAX1], x[MAX1];
+                double a[MAX][MAX], x[MAX];
 
                 printf("\n--- GIAI HE BANG PHUONG PHAP GAUSS ---\n");
-                printf("Nhap so an n = ");
-                scanf("%d", &n);
 
-                nhapMaTranGauss(a, n);
+                nhapMaTranBangFile(a, &n);
 
                 printf("\nMa tran ban dau:\n");
                 xuatMaTranGauss(a, n);
@@ -869,49 +821,30 @@ void menuGiaiHeTuyenTinh() {
                         printf("x%d = %.6f\n", i + 1, x[i]);
                     }
                 }
-
+                endScreen();
                 break;
             }
 
             case 2: {
-                float a[MAX][MAX], x[MAX];
+                double a[MAX][MAX], x[MAX];
 
                 printf("\n--- GIAI HE BANG PHUONG PHAP GAUSS SIEDEL ---\n");
-                printf("Nhap so an n = ");
-                scanf("%d", &n);
-
-                printf("Nhap ma tran mo rong gom %d dong va %d cot:\n", n, n + 1);
-                for (int i = 0; i < n; i++) {
-                    printf("Nhap dong %d: ", i + 1);
-                    for (int j = 0; j <= n; j++) {
-                        scanf("%f", &a[i][j]);
-                    }
-                }
+                nhapMaTranBangFile(a, &n);
 
                 nhapNghiemBanDau(x, n);
-
                 gaussSiedel(a, x, n);
-
+                endScreen();
                 break;
             }
 
             case 3: {
-                double A[MAX][MAX + 1];
+                double A[MAX][MAX];
 
                 printf("\n--- GIAI HE BANG PHUONG PHAP GIAM DU ---\n");
-                printf("Nhap so an n = ");
-                scanf("%d", &n);
-
-                printf("Nhap ma tran mo rong gom %d dong va %d cot:\n", n, n + 1);
-                for (int i = 0; i < n; i++) {
-                    printf("Nhap dong %d: ", i + 1);
-                    for (int j = 0; j <= n; j++) {
-                        scanf("%lf", &A[i][j]);
-                    }
-                }
+                nhapMaTranBangFile(A, &n);
 
                 giamDu(A, n);
-
+                endScreen();
                 break;
             }
 
@@ -928,18 +861,38 @@ void menuGiaiHeTuyenTinh() {
 
 void menuTriRiengVectoRieng() {
     int chon;
+    int n;
 
     do {
         printf("\n========== TIM GIA TRI RIENG VA VECTO RIENG ==========\n");
-        printf("1. Tim gia tri rieng va vecto rieng bang phuong phap Danhilepski\n");
+        printf("1. Tim gia tri rieng bang phuong phap Danhilepski\n");
+        printf("2. Tim vecto rieng bang phuong phap Danhilepski\n");
         printf("0. Quay lai menu chinh\n");
         printf("Nhap lua chon: ");
         scanf("%d", &chon);
 
         switch (chon) {
-            case 1:
-                run3();
+            case 1: {
+                double A[MAX][MAX];
+                printf("\n--- TIM GIA TRI RIENG ---\n");
+                nhapMaTran(A, &n);
+                printf("\nMa tran ban dau:\n");
+                xuatMaTran(A, n);
+                timNghiemTriRiengOnly(A, n);
+                endScreen();
                 break;
+            }
+
+            case 2: {
+                double A[MAX][MAX], C[MAX][MAX];
+                printf("\n--- TIM VECTO RIENG ---\n");
+                nhapMaTran(A, &n);
+                printf("\nMa tran ban dau:\n");
+                xuatMaTran(A, n);
+                timNghiem(A, C, n);
+                endScreen();
+                break;
+            }
 
             case 0:
                 printf("\nQuay lai menu chinh...\n");
@@ -972,14 +925,13 @@ void menuNoiSuy() {
                 printf("\n--- NOI SUY AYKEN ---\n");
                 docFile(x, y, &n, &c);
 
-                printf("\nBang Ayken:\n");
                 bangAyken(x, n, c);
 
-                printf("\nKet qua noi suy:\n");
+                printf("Ket qua noi suy:\n");
                 ayken(x, y, n, c);
 
                 printf("\n");
-
+                endScreen();
                 break;
             }
 
@@ -989,7 +941,7 @@ void menuNoiSuy() {
 
                 printf("\nBang sai phan:\n");
                 bangSaiPhan(a, x, y, n);
-
+                endScreen();
                 break;
             }
 
@@ -1020,16 +972,22 @@ void menuTichPhan() {
             case 1:
                 printf("\n--- CONG THUC HINH THANG ---\n");
                 tichPhanHinhThang();
+                printf("\n");
+                endScreen();
                 break;
 
             case 2:
                 printf("\n--- CONG THUC PARABOL ---\n");
                 tichPhanParabol();
+                printf("\n");
+                endScreen();
                 break;
 
             case 3:
                 printf("\n--- CONG THUC NEWTON-COTET ---\n");
                 tichPhanNewtonCotet();
+                printf("\n");
+                endScreen();
                 break;
 
             case 0:
@@ -1074,7 +1032,7 @@ int main() {
                 break;
 
             case 0:
-                printf("\nThoat chuong trinh.\n");
+                printf("\nThoat chuong trinh!\n");
                 break;
 
             default:
