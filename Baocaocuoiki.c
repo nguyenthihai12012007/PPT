@@ -310,17 +310,38 @@ void giaiBac2(double a, double b, double c, double r[]) {
     }
 }
 
-void giaiBac3(double a, double b, double c, double d, double r[]) {
+double f(double x, double a, double b, double c, double d) {
+    return a*x*x*x + b*x*x + c*x + d;
+}
+
+int giaiBac3(double a, double b, double c, double d, double r[]) {
     int dem = 0;
-    for(int i = -100; i <= 100; i++) {
-        double fx = a*i*i*i + b*i*i + c*i + d; 
-        if(fabs(fx) < 1e-6) {
+    for (int i = -100; i < 100 && dem < 3; i++) {
+        double fa = f(i, a, b, c, d);
+        double fb = f(i + 1, a, b, c, d);
+        if (fabs(fa) < 1e-6) {
             r[dem++] = i;
         }
+        else if (fa * fb < 0) {
+            double left = i;
+            double right = i + 1;
+            double mid, fm;
+            while (fabs(right - left) > 1e-6) {
+                mid = (left + right) / 2.0;
+                fm = f(mid, a, b, c, d);
+                if (fa * fm < 0) {
+                    right = mid;
+                    fb = fm;
+                }
+                else {
+                    left = mid;
+                    fa = fm;
+                }
+            }
+            r[dem++] = (left + right) / 2.0;
+        }
     }
-    if(dem == 0) {
-        printf("Khong tim duoc nghiem!\n");
-    }
+    return dem;
 }
 
 void danhilepskiTriRiengOnly(double A[][MAX], int n) {
@@ -390,9 +411,9 @@ void timNghiemTriRiengOnly(double A[][MAX], int n) {
     }
     if (n == 3){
         double a = 1, b = -A[0][0], c = -A[0][1], d = -A[0][2];
-        giaiBac3(a, b, c, d, r);
+        int soNghiem = giaiBac3(a, b, c, d, r);
         printf("\nGia tri rieng: ");
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < soNghiem; i++) {
             printf("\n     r%d = %.3lf", i + 1, r[i]);
         }
     }
@@ -518,9 +539,9 @@ void timNghiem(double A[][MAX], double C[][MAX], int n) {
     }
     if (n == 3){
         double a = 1, b = -A[0][0], c = -A[0][1], d = -A[0][2];
-        giaiBac3(a, b, c, d, r);
+        int soNghiem = giaiBac3(a, b, c, d, r);
         printf("\nGia tri rieng: ");
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < soNghiem; i++) {
             printf("\n     r%d = %.3lf", i + 1, r[i]);
         }
         printf("\n");
